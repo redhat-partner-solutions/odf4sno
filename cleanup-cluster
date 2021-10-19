@@ -1,0 +1,8 @@
+#!/bin/bash
+set -e
+
+HERE=$(dirname "$(readlink --canonicalize "$BASH_SOURCE")")
+. "$HERE/env"
+
+oc debug "node/$NODE" -- \
+rm --recursive --force /host/var/lib/rook

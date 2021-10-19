@@ -1,0 +1,5 @@
+#!/bin/bash
+set -e
+
+kubectl exec deployment/rook-ceph-operator --namespace=openshift-storage -- \
+ceph -c /var/lib/rook/openshift-storage/openshift-storage.config "$@"

@@ -1,0 +1,11 @@
+#!/bin/bash
+set -e
+
+HERE=$(dirname "$(readlink --canonicalize "$BASH_SOURCE")")
+. "$HERE/env"
+
+# See:
+# https://github.com/rook/rook/blob/master/Documentation/ceph-teardown.md
+
+oc debug "node/$NODE" -- \
+dd if=/dev/zero of="$DRIVE" bs=1M count=100 oflag=direct,dsync
