@@ -28,14 +28,19 @@ Alternatives to ODF
 -------------------
 
 SNO *does* come with the [Local Storage Operator](https://github.com/openshift/local-storage-operator), which
-allows for *non*-dynamic persistent volumes on local drives. That might be good enough for your use case, and indeed
-it would offer the best possible raw performance as it allows pods to directly access the drive. You can use it to
-create your persistent volumes manually or enable "Local Volume Discovery" (not enabled by default), which will
-automatically create persistent volumes with the name prefix `local-pv-` for all unused disks. (It will also
-populate the "Disks" tab for Nodes in the OpenShift web dashboard.)
+allows for *non*-dynamic persistent volumes on local drives. Similarly, it does not provide a distributed
+filesystem so the pods must be located on the nodes with the drives.
 
-Also check out [Open-Local](https://github.com/alibaba/open-local), which specifically provides dynamic provisioning
-of persistent volumes on local disks and nothing else.
+It might be good enough for your use case, and indeed it would offer the best possible raw performance as it allows
+pods to directly access the drive. You can use it to create your persistent volumes manually or enable "Local Volume
+Discovery" (not enabled by default), which will automatically create persistent volumes with the name prefix
+`local-pv-` for all unused disks. (It will also populate the "Disks" tab for Nodes in the OpenShift web dashboard.)
+
+Also check out these two solutions, which are similar to the Local Storage Operator but add the ability to dynamically
+provision persistent volumes by leveraging LVM to create partitions:
+
+* [TopoLVM](https://github.com/topolvm/topolvm)
+* [Open-Local](https://github.com/alibaba/open-local)
 
 Guide
 -----
