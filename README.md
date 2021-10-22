@@ -36,11 +36,12 @@ pods to directly access the drive. You can use it to create your persistent volu
 Discovery" (not enabled by default), which will automatically create persistent volumes with the name prefix
 `local-pv-` for all unused disks. (It will also populate the "Disks" tab for Nodes in the OpenShift web dashboard.)
 
-Also check out these two solutions, which are similar to the Local Storage Operator but add the ability to dynamically
-provision persistent volumes by leveraging LVM to create partitions:
+Also check out these alternatives, which are similar to the Local Storage Operator but add the ability to dynamically
+provision persistent volumes:
 
-* [TopoLVM](https://github.com/topolvm/topolvm)
-* [Open-Local](https://github.com/alibaba/open-local)
+* [TopoLVM](https://github.com/topolvm/topolvm) (Cybozu): provisions LVM partitions per volume
+* [Open-Local](https://github.com/alibaba/open-local) (Alibaba): provisions LVM partitions per volume
+* [Local Path Provisioner](https://github.com/rancher/local-path-provisioner) (Rancher): provisions hostPath directories per volume
 
 Guide
 -----
