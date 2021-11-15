@@ -76,24 +76,24 @@ You'll see the cluster's pods created here with the prefix `rook-ceph-`:
 
 The Ceph cluster comprises the following component types:
 
-* *mon (monitor)*: These manage the high-level Ceph cluster's connectivity and status. Each instance manages a database about
+* **mon (monitor)**: These manage the high-level Ceph cluster's connectivity and status. Each instance manages a database about
   the cluster stored by default at `/var/lib/rook` on its host. Note that if you run multiple Ceph clusters then you must set
   each to use a different directory or otherwise make sure that their mon instances are not running on the same nodes. A quorum
   of at least 3 mon instances is required per cluster. The default for multi-node clusters it to place them on separate nodes, so
   for SNO we need to explicitly enable them to run on the same node.
-* *mgr (manager)*: These provide user access to the Ceph cluster. This includes responding to the `ceph` command line tool,
+* **mgr (manager)**: These provide user access to the Ceph cluster. This includes responding to the `ceph` command line tool,
   serving the web dashboard, and providing Prometheus telemetry. They can be configured with various optional modules. The Ceph
   cluster can scale these out as need. For SNO a single instance will be automatically deployed.
-* *osd (object storage daemon)*: These handle low-level local disk I/O, which they expose to clients over the network. They are
+* **osd (object storage daemon)**: These handle low-level local disk I/O, which they expose to clients over the network. They are
   deployed on-demand for every node that is adding its local disk to the cluster and are indeed the only components that need to
   run on the storage nodes. By default multiple instances are deployed per node for redunancy but for SNO this is unnecessary,
   so we configure it to use just one.
-* *mds (metadata server daemon)*: These handle a high-level distributed filesystem on top of the raw storage exposed by the osd
+* **mds (metadata server daemon)**: These handle a high-level distributed filesystem on top of the raw storage exposed by the osd
   instances. Internally this is achieved by creating a separate storage block for filesystem metadata. They are only deployed if
   a filesystem is explicitly created for the cluster. Note that since Ceph 16 it is possible to create multiple filesystems per
   cluster. Rook always creates double the number of mds instances we request for redundancy. For SNO it is enough to request
   one, thus we will have two running mds instances.
-* *crashcollector*: These are deployed per node to collect crash information from other components. For SNO this means that
+* **crashcollector**: These are deployed per node to collect crash information from other components. For SNO this means that
   only one will be deployed.
 
 At this point we should have mon, mgr, osd, and crashcollector instances. We have not yet created a filesystem so there will be
@@ -136,10 +136,9 @@ We've configured our cluster to use all our drives. Ceph will specifically look 
 have already been structured for Ceph. Note that "unused" means no MBR, too! If no such drives are found then you will not see any
 osd instances. You can check various logs to find out what went wrong:
 
+    kubectl logs --selector=app=rook-ceph-osd-prepare --namespace=openshift-storage
     kubectl logs deployment/rook-ceph-operator --namespace=openshift-storage
-    kubectl logs deployment/rook-ceph-mon-a --namespace=openshift-storage
-
-There may also be an init pod with the prefix `rook-ceph-osd-prepare-`.
+    kubectl logs deployment/rook-ceph-mon-a --namespace=openshift-storage --container=mon
 
 Often the issue is that the drive is not truly "unused". To erase it completely see "zapping devices" in the
 [documentation](https://github.com/rook/rook/blob/master/Documentation/ceph-teardown.md). For an HDD use our script:
